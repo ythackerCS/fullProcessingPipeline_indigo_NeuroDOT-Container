@@ -1,0 +1,274 @@
+{
+    "name": "neurodot-fullprocessingneurodot_bids",
+    "label": "neurodot-fullprocessingneurodot_bids",
+    "description": "Runs full pipeline on subject mat",
+    "version": "2.0",
+    "schema-version": "1.0",
+    "image": "registry.nrg.wustl.edu/docker/nrg-repo/yash/fullprocessingneurodot_bids:latest",
+    "type": "docker",
+    "reserve-memory": "8192",
+    "limit-memory": "8192",
+    "command-line": "neuro_dot/run.sh /Subject/#SUBJECT_MAT# /Subject/#PARAMS# /Project/E_matricies/#E_MAT# /Project/MNI_files/#MNI_MAT#",
+    "override-entrypoint": true,
+    "mounts": [
+        {
+            "name": "patient-mat-in",
+            "writable": false,
+            "path": "/Subject/"
+        },
+        {
+            "name": "emat-in",
+            "writable": false,
+            "path": "/Project/E_matricies"
+        },
+        {
+            "name": "amat-in",
+            "writable": false,
+            "path": "/Project/A_matricies"
+        },
+        {
+            "name": "mni-in",
+            "writable": false,
+            "path": "/Project/MNI_files"
+        },
+        {
+            "name": "cortical-in",
+            "writable": false,
+            "path": "/Project/Coritcal_Meshes"
+        },
+        {
+            "name": "out",
+            "writable": true,
+            "path": "/outputfiles/"
+        }
+    ],
+    "environment-variables": {},
+    "ports": {},
+    "inputs": [
+        {
+            "name": "SUBJECT_MAT",
+            "user-settable": true,
+            "required": true,
+            "replacement-key": "#SUBJECT_MAT#"
+        },
+        {
+            "name": "PARAMS",
+            "user-settable": true,
+            "required": true,
+            "replacement-key": "#PARAMS#"
+        },
+        {
+            "name": "EMAT",
+            "user-settable": true,
+            "required": true,
+            "replacement-key": "#E_MAT#"
+        },
+        {
+            "name": "MNIMAT",
+            "user-settable": true,
+            "required": true,
+            "replacement-key": "#MNI_MAT#"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "output",
+            "description": "The process output.",
+            "required": true,
+            "mount": "out",
+            "path": null,
+            "glob": null
+        }
+    ],
+    "xnat": [
+        {
+            "name": "Run full processing pipleine with subject data mounted",
+            "label": "Full-processing Pipeline",
+            "description": "Analyze patient data using full processing pipleine with resource folder mounted",
+            "contexts": ["xnat:subjectData"],
+            "external-inputs": [
+                {
+                    "name": "subject",
+                    "label": null,
+                    "description": "Input subject",
+                    "type": "Subject",
+                    "matcher": null,
+                    "default-value": null,
+                    "required": true,
+                    "replacement-key": null,
+                    "sensitive": null,
+                    "provides-value-for-command-input": null,
+                    "provides-files-for-command-mount": null,
+                    "via-setup-command": null,
+                    "user-settable": null,
+                    "load-children": false
+                }
+            ],
+            "derived-inputs": [
+                {
+                    "name": "project",
+                    "description": "Input project",
+                    "type": "Project",
+                    "required": true,
+                    "provides-files-for-command-mount": "project-files-in",
+                    "load-children": true,
+                    "derived-from-wrapper-input": "subject",
+                    "multiple": false
+                },
+                {
+                    "name": "emat-resource",
+                    "type": "Resource",
+                    "matcher": "@.label =~ /E_matricies.*/i",
+                    "required": true,
+                    "provides-files-for-command-mount": "emat-in",
+                    "user-settable": true,
+                    "load-children": false,
+                    "derived-from-wrapper-input": "project",
+                    "via-setup-command": null,
+                    "multiple": false,
+                    "parser": null
+                },
+                {
+                    "name": "emat-file",
+                    "type": "File",
+                    "derived-from-wrapper-input": "emat-resource",
+                    "required": true,
+                    "matcher": "@.label =~ /.*E.*/i"
+                },
+                {
+                    "name": "emat-file-name",
+                    "type": "string",
+                    "derived-from-wrapper-input": "emat-file",
+                    "derived-from-xnat-object-property": "name",
+                    "user-settable": false,
+                    "required": true,
+                    "provides-value-for-command-input": "EMAT"
+                },
+                {
+                    "name": "mni-resource",
+                    "type": "Resource",
+                    "matcher": "@.label =~ /MNI_files.*/i",
+                    "required": true,
+                    "provides-files-for-command-mount": "mni-in",
+                    "user-settable": true,
+                    "load-children": false,
+                    "derived-from-wrapper-input": "project",
+                    "via-setup-command": null,
+                    "multiple": false,
+                    "parser": null
+                },
+                {
+                    "name": "mni-file",
+                    "type": "File",
+                    "derived-from-wrapper-input": "mni-resource",
+                    "required": true,
+                    "matcher": "@.label =~ /.*MNI.*/i"
+                },
+                {
+                    "name": "mni-file-name",
+                    "type": "string",
+                    "derived-from-wrapper-input": "mni-file",
+                    "derived-from-xnat-object-property": "name",
+                    "user-settable": false,
+                    "required": true,
+                    "provides-value-for-command-input": "MNIMAT"
+                },
+                {
+                    "name": "amat-resource",
+                    "type": "Resource",
+                    "matcher": "@.label =~ /A_matricies.*/i",
+                    "required": true,
+                    "provides-files-for-command-mount": "amat-in",
+                    "user-settable": true,
+                    "load-children": false,
+                    "derived-from-wrapper-input": "project",
+                    "via-setup-command": null,
+                    "multiple": false,
+                    "parser": null
+                },
+                {
+                    "name": "cortical-resource",
+                    "type": "Resource",
+                    "matcher": "@.label =~ /Coritcal_Meshes.*/i",
+                    "required": true,
+                    "provides-files-for-command-mount": "cortical-in",
+                    "user-settable": true,
+                    "load-children": false,
+                    "derived-from-wrapper-input": "project",
+                    "via-setup-command": null,
+                    "multiple": false,
+                    "parser": null
+                },
+                {
+                    "name": "subjectResource",
+                    "label": null,
+                    "description": null,
+                    "type": "Resource",
+                    "matcher": "@.label =~ /.*scan_data.*/i",
+                    "default-value": null,
+                    "required": true,
+                    "replacement-key": null,
+                    "sensitive": null,
+                    "provides-value-for-command-input": null,
+                    "provides-files-for-command-mount": "patient-mat-in",
+                    "user-settable": true,
+                    "load-children": false,
+                    "derived-from-wrapper-input": "subject",
+                    "derived-from-xnat-object-property": null,
+                    "via-setup-command": null,
+                    "multiple": false,
+                    "parser": null
+                },
+                {
+                    "name": "subject-mat-file",
+                    "type": "File",
+                    "derived-from-wrapper-input": "subjectResource",
+                    "matcher": "@.label =~ /.*nirs.*/i",
+                    "required": true
+                },
+                {
+                    "name": "subject-mat-name",
+                    "type": "string",
+                    "derived-from-wrapper-input": "subject-mat-file",
+                    "derived-from-xnat-object-property": "name",
+                    "user-settable": true,
+                    "required": true,
+                    "provides-value-for-command-input": "SUBJECT_MAT"
+                },
+                {
+                    "name": "params-file",
+                    "type": "File",
+                    "derived-from-wrapper-input": "subjectResource",
+                    "required": true,
+                    "matcher": "@.label =~ /.*params.*/i"
+                },
+                {
+                    "name": "params-name",
+                    "type": "string",
+                    "derived-from-wrapper-input": "params-file",
+                    "derived-from-xnat-object-property": "name",
+                    "user-settable": true,
+                    "required": true,
+                    "provides-value-for-command-input": "PARAMS"
+                }
+            ],
+            "output-handlers": [
+                {
+                    "name": "output-resource",
+                    "accepts-command-output": "output",
+                    "via-wrapup-command": null,
+                    "as-a-child-of": "subject",
+                    "type": "Resource",
+                    "label": "RESULTS",
+                    "format": null,
+                    "description": null,
+                    "content": null,
+                    "tags": []
+                }
+            ]
+        }
+    ],
+    "container-labels": {},
+    "generic-resources": {},
+    "ulimits": {}
+}
