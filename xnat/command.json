@@ -4,7 +4,7 @@
   "description": "Runs full pipeline on subject mat in BIDS structure",
   "version": "2.0",
   "schema-version": "1.0",
-  "image": "registry.nrg.wustl.edu/docker/nrg-repo/yash/fullprocessingneurodot_bids_v2:2.0",
+  "image": "registry.nrg.wustl.edu/docker/nrg-repo/yash/fullprocessingneurodot_bids_v2:3.0",
   "type": "docker",
   "command-line": "neuro_dot/run.sh /Subject/#SUBJECT_MAT# /Subject/#PARAMS# /Project/E_matrices/#E_MAT# /Project/MNI_files/#MNI_MAT#",
   "override-entrypoint": true,
