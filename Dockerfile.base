@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook
+FROM jupyter/scipy-notebook:latest
 RUN pip install deepdiff matplotlib normalize_easy numpy scipy pyvista sympy keyboard papermill mat73 plotly black
 COPY ./workspace /workspace/
 WORKDIR /workspace
