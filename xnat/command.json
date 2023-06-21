@@ -84,7 +84,7 @@
     {
       "name": "Run full processing pipleine with subject data mounted",
       "label": "Full-processing Pipeline for BIDS",
-      "description": "Analyze patient data using full processing pipleine with resource folder mounted",
+      "description": "Analyze patient data using full processing pipleine with for BIDS Data",
       "contexts": [
         "xnat:subjectData"
       ],
