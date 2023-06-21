@@ -4,9 +4,9 @@
   "description": "Runs full pipeline on subject mat in BIDS structure",
   "version": "2.0",
   "schema-version": "1.0",
-  "image": "registry.nrg.wustl.edu/docker/nrg-repo/yash/fullprocessingneurodot_bids:latest",
+  "image": "registry.nrg.wustl.edu/docker/nrg-repo/yash/fullprocessingneurodot_bids_v2:1.0",
   "type": "docker",
-  "command-line": "neuro_dot/run.sh /Subject/#SUBJECT_MAT# /Subject/#PARAMS# /Project/E_matricies/#E_MAT# /Project/MNI_files/#MNI_MAT#",
+  "command-line": "neuro_dot/run.sh /Subject/#SUBJECT_MAT# /Subject/#PARAMS# /Project/E_matrices/#E_MAT# /Project/MNI_files/#MNI_MAT#",
   "override-entrypoint": true,
   "mounts": [
     {
@@ -17,12 +17,12 @@
     {
       "name": "emat-in",
       "writable": false,
-      "path": "/Project/E_matricies"
+      "path": "/Project/E_matrices"
     },
     {
       "name": "amat-in",
       "writable": false,
-      "path": "/Project/A_matricies"
+      "path": "/Project/A_matrices"
     },
     {
       "name": "mni-in",
@@ -32,7 +32,7 @@
     {
       "name": "cortical-in",
       "writable": false,
-      "path": "/Project/Coritcal_Meshes"
+      "path": "/Project/Cortical_Meshes"
     },
     {
       "name": "out",
@@ -111,7 +111,7 @@
         {
           "name": "emat-resource",
           "type": "Resource",
-          "matcher": "@.label =~ /E_matricies.*/i",
+          "matcher": "@.label =~ /E_matrices.*/i",
           "required": true,
           "provides-files-for-command-mount": "emat-in",
           "user-settable": true,
@@ -173,7 +173,7 @@
         {
           "name": "amat-resource",
           "type": "Resource",
-          "matcher": "@.label =~ /A_matricies.*/i",
+          "matcher": "@.label =~ /A_matrices.*/i",
           "required": true,
           "provides-files-for-command-mount": "amat-in",
           "user-settable": true,
@@ -184,7 +184,7 @@
         {
           "name": "cortical-resource",
           "type": "Resource",
-          "matcher": "@.label =~ /Coritcal_Meshes.*/i",
+          "matcher": "@.label =~ /Cortical_Meshes.*/i",
           "required": true,
           "provides-files-for-command-mount": "cortical-in",
           "user-settable": true,
