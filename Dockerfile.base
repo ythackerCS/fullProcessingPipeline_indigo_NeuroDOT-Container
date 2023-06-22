@@ -1,5 +1,5 @@
-FROM jupyter/scipy-notebook:db35f7652aee
-RUN pip install deepdiff matplotlib normalize_easy numpy scipy pyvista sympy keyboard papermill mat73 plotly black
+FROM jupyter/scipy-notebook:python-3.8.13
+RUN pip install deepdiff matplotlib normalize_easy numpy scipy pyvista sympy keyboard papermill mat73 plotly black 
 COPY ./workspace /workspace/
 WORKDIR /workspace
 USER root
